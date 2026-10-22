@@ -112,6 +112,14 @@
     "missingLabels": "Add labels before publishing: {keys}",
     "warnings": "Warnings",
     "preview": "Preview",
-    "noTemplates": "No templates yet"
+    "noTemplates": "No templates yet",
+    "qTime": "Time",
+    "qLocale": "Language",
+    "qQuestion": "Question",
+    "qAnswer": "Answer",
+    "qFailed": "failed",
+    "qPrev": "Previous",
+    "qNext": "Next",
+    "qEmpty": "No questions yet"
   }
 }

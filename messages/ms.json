@@ -112,6 +112,14 @@
     "missingLabels": "Tambah label sebelum menerbitkan: {keys}",
     "warnings": "Amaran",
     "preview": "Pratonton",
-    "noTemplates": "Belum ada templat"
+    "noTemplates": "Belum ada templat",
+    "qTime": "Masa",
+    "qLocale": "Bahasa",
+    "qQuestion": "Soalan",
+    "qAnswer": "Jawapan",
+    "qFailed": "gagal",
+    "qPrev": "Sebelumnya",
+    "qNext": "Seterusnya",
+    "qEmpty": "Belum ada soalan"
   }
 }
