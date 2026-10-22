@@ -18,21 +18,24 @@ export default async function QuestionsPage({ searchParams }: { searchParams: Pr
   const { supabase } = await requireAdmin();
   const t = await getTranslations('admin');
   const n = parseInt((await searchParams).page ?? '', 10);
-  const page = n > 0 ? n : 1;
+  const page = Number.isSafeInteger(n) && n > 0 ? n : 1;
   const from = (page - 1) * PER_PAGE;
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('ai_queries')
     .select('id, created_at, locale, question, response, profiles(company_name)')
     .order('created_at', { ascending: false })
+    .order('id')
     .range(from, from + PER_PAGE - 1)
     .returns<Row[]>();
+  if (error) throw error;
   const rows = data ?? [];
 
   const ids = [...new Set(rows.flatMap((r) => r.response?.templates?.map((x) => x.id) ?? []))];
   const titles = new Map<string, string>();
   if (ids.length) {
-    const { data: ts } = await supabase.from('templates').select('id, title').in('id', ids);
+    const { data: ts, error: tErr } = await supabase.from('templates').select('id, title').in('id', ids);
+    if (tErr) console.error(tErr);
     ts?.forEach((x) => titles.set(x.id, x.title));
   }
 
@@ -40,6 +43,7 @@ export default async function QuestionsPage({ searchParams }: { searchParams: Pr
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-semibold">{t('navQuestions')}</h1>
       {rows.length === 0 && <p>{t('qEmpty')}</p>}
+      <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
           <tr><th>{t('qTime')}</th><th>{t('company')}</th><th>{t('qLocale')}</th><th>{t('qQuestion')}</th><th>{t('qAnswer')}</th></tr>
@@ -65,6 +69,7 @@ export default async function QuestionsPage({ searchParams }: { searchParams: Pr
           ))}
         </tbody>
       </table>
+      </div>
       <div className="flex gap-4">
         {page > 1 && <Link href={`/admin/questions?page=${page - 1}`} className="underline">{t('qPrev')}</Link>}
         {rows.length === PER_PAGE && <Link href={`/admin/questions?page=${page + 1}`} className="underline">{t('qNext')}</Link>}
