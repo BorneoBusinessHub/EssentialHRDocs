@@ -10,6 +10,9 @@ describe('parseAnalysis', () => {
     expect(parseAnalysis('```json\n' + JSON.stringify(ok) + '\n```', ids)).toEqual(ok);
     expect(parseAnalysis('```\n' + JSON.stringify(ok) + '\n```', ids)).toEqual(ok);
   });
+  it('recovers JSON wrapped in prose', () => {
+    expect(parseAnalysis('Here you go: ' + JSON.stringify(ok) + ' Hope it helps', ids)).toEqual(ok);
+  });
   it('returns null on junk', () => {
     expect(parseAnalysis('Sure! here you go', ids)).toBeNull();
     expect(parseAnalysis('', ids)).toBeNull();

@@ -11,7 +11,9 @@ export type Analysis = z.infer<typeof schema>;
 export function parseAnalysis(raw: string, publishedIds: Set<string>): Analysis | null {
   try {
     const text = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
-    const r = schema.safeParse(JSON.parse(text));
+    const a = text.indexOf('{'), b = text.lastIndexOf('}');
+    if (a < 0 || b < a) return null;
+    const r = schema.safeParse(JSON.parse(text.slice(a, b + 1)));
     if (!r.success) return null;
     const seen = new Set<string>();
     const templates = r.data.is_hr

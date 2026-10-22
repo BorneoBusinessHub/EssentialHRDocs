@@ -15,14 +15,17 @@ export type AnalyseResult =
 
 export async function analyse(question: string): Promise<AnalyseResult> {
   const { supabase, user } = await requireUser();
-  const q = (question ?? '').trim();
+  if (typeof question !== 'string') return { status: 'invalid' };
+  const q = question.trim();
   if (!q || q.length > 2000) return { status: 'invalid' };
 
-  const { count } = await supabase
+  // ponytail: count-then-insert; parallel requests can exceed the limit; reserve a row first if abused
+  const { count, error: countError } = await supabase
     .from('ai_queries')
     .select('id', { count: 'exact', head: true })
     .eq('user_id', user.id)
     .gte('created_at', startOfDayMYT(new Date()).toISOString());
+  if (countError) return { status: 'error' };
   if ((count ?? 0) >= DAILY_LIMIT) return { status: 'limit' };
 
   const locale = (await getLocale()) as Locale;
@@ -30,7 +33,8 @@ export async function analyse(question: string): Promise<AnalyseResult> {
   const published = (data ?? []) as TemplateSummary[];
 
   const analysis = await runAnalysis(q, locale, published);
-  await supabase.from('ai_queries').insert({ user_id: user.id, question: q, locale, response: analysis });
+  const { error: insertError } = await supabase.from('ai_queries').insert({ user_id: user.id, question: q, locale, response: analysis });
+  if (insertError) console.error('ai_queries insert failed', insertError);
   if (!analysis) return { status: 'error' };
 
   const byId = new Map(published.map(t => [t.id, t]));
