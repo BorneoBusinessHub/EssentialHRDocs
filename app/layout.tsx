@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { NextIntlClientProvider } from "next-intl";
+import { LanguageSwitch } from "@/components/language-switch";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +26,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {/* locale comes from a cookie (dynamic), so it must sit inside Suspense; LanguageSwitch syncs <html lang> */}
+        <Suspense>
+          <NextIntlClientProvider>
+            <div className="flex justify-end p-2"><LanguageSwitch /></div>
+            {children}
+          </NextIntlClientProvider>
+        </Suspense>
+      </body>
     </html>
   );
 }

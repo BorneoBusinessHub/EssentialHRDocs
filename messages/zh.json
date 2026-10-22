@@ -1,0 +1,32 @@
+{
+  "common": {
+    "appName": "人力资源文件平台",
+    "logout": "退出登录",
+    "library": "文件库",
+    "language": "语言",
+    "lang_en": "English",
+    "lang_ms": "Bahasa Malaysia",
+    "lang_zh": "中文"
+  },
+  "login": {
+    "title": "登录",
+    "email": "电子邮件",
+    "password": "密码",
+    "submit": "登录",
+    "error": "电子邮件或密码不正确",
+    "expired": "您的订阅已过期，请联系我们续订。",
+    "forgot": "忘记密码？请联系我们。"
+  },
+  "ask": {
+    "aiFailure": "暂时无法分析。请重试或浏览文件库。",
+    "limit": "您已达到今日使用上限，将于午夜（马来西亚时间）重置。"
+  },
+  "result": {
+    "disclaimer": "此内容仅为一般性指引，不构成法律意见。"
+  },
+  "library": {},
+  "fill": {
+    "exportFailed": "下载失败，请重试。"
+  },
+  "admin": {}
+}

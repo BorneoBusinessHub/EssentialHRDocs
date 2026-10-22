@@ -1,0 +1,32 @@
+{
+  "common": {
+    "appName": "HR Documents Portal",
+    "logout": "Logout",
+    "library": "Library",
+    "language": "Language",
+    "lang_en": "English",
+    "lang_ms": "Bahasa Malaysia",
+    "lang_zh": "中文"
+  },
+  "login": {
+    "title": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "error": "Incorrect email or password",
+    "expired": "Your subscription has expired. Please contact us to renew.",
+    "forgot": "Forgot password? Contact us."
+  },
+  "ask": {
+    "aiFailure": "Couldn't analyse right now. Try again or browse the library.",
+    "limit": "You've reached today's limit. It resets at midnight (Malaysia time)."
+  },
+  "result": {
+    "disclaimer": "This is general guidance, not legal advice."
+  },
+  "library": {},
+  "fill": {
+    "exportFailed": "Download failed, please try again."
+  },
+  "admin": {}
+}

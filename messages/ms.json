@@ -1,0 +1,32 @@
+{
+  "common": {
+    "appName": "Portal Dokumen HR",
+    "logout": "Log keluar",
+    "library": "Perpustakaan",
+    "language": "Bahasa",
+    "lang_en": "English",
+    "lang_ms": "Bahasa Malaysia",
+    "lang_zh": "中文"
+  },
+  "login": {
+    "title": "Log masuk",
+    "email": "E-mel",
+    "password": "Kata laluan",
+    "submit": "Log masuk",
+    "error": "E-mel atau kata laluan tidak betul",
+    "expired": "Langganan anda telah tamat tempoh. Sila hubungi kami untuk memperbaharui.",
+    "forgot": "Lupa kata laluan? Hubungi kami."
+  },
+  "ask": {
+    "aiFailure": "Tidak dapat menganalisis sekarang. Cuba lagi atau layari perpustakaan.",
+    "limit": "Anda telah mencapai had hari ini. Ia ditetapkan semula pada tengah malam (waktu Malaysia)."
+  },
+  "result": {
+    "disclaimer": "Ini adalah panduan umum, bukan nasihat undang-undang."
+  },
+  "library": {},
+  "fill": {
+    "exportFailed": "Muat turun gagal, sila cuba lagi."
+  },
+  "admin": {}
+}
