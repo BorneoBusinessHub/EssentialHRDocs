@@ -32,8 +32,19 @@ create index ai_queries_user_created_idx on public.ai_queries (user_id, created_
 
 -- security definer runs as owner (bypasses profiles RLS), so no policy recursion.
 create function public.is_admin() returns boolean
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = '' as $$
   select exists (select 1 from public.profiles where id = auth.uid() and role = 'admin');
+$$;
+
+-- admin, or a customer who is enabled and not past expiry (Malaysia date)
+create function public.is_active() returns boolean
+language sql stable security definer set search_path = '' as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid()
+      and (role = 'admin'
+           or (not disabled and expires_at >= (now() at time zone 'Asia/Kuala_Lumpur')::date))
+  );
 $$;
 
 alter table public.profiles enable row level security;
@@ -41,15 +52,20 @@ alter table public.templates enable row level security;
 alter table public.ai_queries enable row level security;
 
 -- profiles: writes only via service role (no policy)
-create policy profiles_select on public.profiles for select using (id = auth.uid() or public.is_admin());
+create policy profiles_select on public.profiles for select to authenticated
+  using (id = auth.uid() or public.is_admin());
 
-create policy templates_select on public.templates for select using (published or public.is_admin());
-create policy templates_insert on public.templates for insert with check (public.is_admin());
-create policy templates_update on public.templates for update using (public.is_admin()) with check (public.is_admin());
-create policy templates_delete on public.templates for delete using (public.is_admin());
+create policy templates_select on public.templates for select to authenticated
+  using ((published and public.is_active()) or public.is_admin());
+create policy templates_insert on public.templates for insert to authenticated with check (public.is_admin());
+create policy templates_update on public.templates for update to authenticated
+  using (public.is_admin()) with check (public.is_admin());
+create policy templates_delete on public.templates for delete to authenticated using (public.is_admin());
 
-create policy ai_queries_select on public.ai_queries for select using (user_id = auth.uid() or public.is_admin());
-create policy ai_queries_insert on public.ai_queries for insert with check (user_id = auth.uid());
+create policy ai_queries_select on public.ai_queries for select to authenticated
+  using ((user_id = auth.uid() and public.is_active()) or public.is_admin());
+create policy ai_queries_insert on public.ai_queries for insert to authenticated
+  with check (user_id = auth.uid() and public.is_active());
 
 -- private bucket, no storage policies: service role only
 insert into storage.buckets (id, name, public) values ('templates','templates', false) on conflict do nothing;
