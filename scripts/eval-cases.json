@@ -1,0 +1,5 @@
+[
+  { "question": "Staff keeps coming late, already gave verbal warning twice.", "locale": "en", "expected_template_title": "Warning Letter" },
+  { "question": "Employee wants to resign, how much notice is needed?", "locale": "en", "expected_template_title": "Resignation Acceptance Letter" },
+  { "question": "I want to hire a part-timer, what contract do I need?", "locale": "en", "expected_template_title": "Part-Time Employment Contract" }
+]
