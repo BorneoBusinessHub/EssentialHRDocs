@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
 import { login } from './actions';
 
@@ -16,9 +15,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 p-6">
       <h1 className="text-2xl font-semibold">{t('title')}</h1>
-      <Suspense>
-        <Notice searchParams={searchParams} />
-      </Suspense>
+      <Notice searchParams={searchParams} />
       <form action={login} className="flex flex-col gap-3">
         <input name="email" type="email" required autoComplete="email" placeholder={t('email')} className="rounded border p-2" />
         <input name="password" type="password" required autoComplete="current-password" placeholder={t('password')} className="rounded border p-2" />

@@ -1,5 +1,4 @@
 'use client';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -7,7 +6,6 @@ export function LanguageSwitch() {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('common');
-  useEffect(() => { document.documentElement.lang = locale; }, [locale]);
   return (
     <select
       aria-label={t('language')}

@@ -11,6 +11,10 @@ function flat(o: Record<string, unknown>, p = ''): string[] {
 
 describe('messages', () => {
   const keys = flat(en).sort();
+  it('top-level namespaces match', () => {
+    expect(Object.keys(ms).sort()).toEqual(Object.keys(en).sort());
+    expect(Object.keys(zh).sort()).toEqual(Object.keys(en).sort());
+  });
   it('ms has exactly the en keys', () => expect(flat(ms).sort()).toEqual(keys));
   it('zh has exactly the en keys', () => expect(flat(zh).sort()).toEqual(keys));
   it('fixed disclaimer copy', () =>
