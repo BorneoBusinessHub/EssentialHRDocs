@@ -52,6 +52,27 @@
     "resetPassword": "Tetap semula kata laluan",
     "enable": "Aktifkan",
     "disable": "Nyahaktifkan",
-    "saved": "Disimpan"
+    "saved": "Disimpan",
+    "tplTitle": "Tajuk",
+    "category": "Kategori",
+    "description": "Penerangan",
+    "tags": "Tag (dipisahkan koma)",
+    "uploadTemplate": "Muat naik templat .docx",
+    "replaceFile": "Ganti .docx",
+    "upload": "Muat naik",
+    "tplPublished": "Diterbitkan",
+    "tplDraft": "Draf",
+    "updatedAt": "Dikemas kini",
+    "edit": "Sunting",
+    "fieldLabel": "Label",
+    "fieldHint": "Petunjuk",
+    "fields": "Medan",
+    "saveChanges": "Simpan perubahan",
+    "publish": "Terbitkan",
+    "unpublish": "Nyahterbit",
+    "missingLabels": "Tambah label sebelum menerbitkan: {keys}",
+    "warnings": "Amaran",
+    "preview": "Pratonton",
+    "noTemplates": "Belum ada templat"
   }
 }

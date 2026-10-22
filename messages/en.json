@@ -52,6 +52,27 @@
     "resetPassword": "Reset password",
     "enable": "Enable",
     "disable": "Disable",
-    "saved": "Saved"
+    "saved": "Saved",
+    "tplTitle": "Title",
+    "category": "Category",
+    "description": "Description",
+    "tags": "Tags (comma-separated)",
+    "uploadTemplate": "Upload .docx template",
+    "replaceFile": "Replace .docx",
+    "upload": "Upload",
+    "tplPublished": "Published",
+    "tplDraft": "Draft",
+    "updatedAt": "Updated",
+    "edit": "Edit",
+    "fieldLabel": "Label",
+    "fieldHint": "Hint",
+    "fields": "Fields",
+    "saveChanges": "Save changes",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "missingLabels": "Add labels before publishing: {keys}",
+    "warnings": "Warnings",
+    "preview": "Preview",
+    "noTemplates": "No templates yet"
   }
 }

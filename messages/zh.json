@@ -52,6 +52,27 @@
     "resetPassword": "重置密码",
     "enable": "启用",
     "disable": "停用",
-    "saved": "已保存"
+    "saved": "已保存",
+    "tplTitle": "标题",
+    "category": "类别",
+    "description": "说明",
+    "tags": "标签（用逗号分隔）",
+    "uploadTemplate": "上传 .docx 模板",
+    "replaceFile": "替换 .docx",
+    "upload": "上传",
+    "tplPublished": "已发布",
+    "tplDraft": "草稿",
+    "updatedAt": "更新时间",
+    "edit": "编辑",
+    "fieldLabel": "标签",
+    "fieldHint": "提示",
+    "fields": "字段",
+    "saveChanges": "保存更改",
+    "publish": "发布",
+    "unpublish": "取消发布",
+    "missingLabels": "发布前请先填写标签：{keys}",
+    "warnings": "警告",
+    "preview": "预览",
+    "noTemplates": "暂无模板"
   }
 }
