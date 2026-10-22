@@ -8,7 +8,7 @@ import chromium from '@sparticuz/chromium';
 // document actually uses; we serve them from disk via request interception, so no multi-MB base64 per request.
 const FONT_DIR = path.join(process.cwd(), 'node_modules/@fontsource/noto-sans-sc');
 const FONT_HOST = 'https://fonts.invalid/'; // reserved TLD, never resolvable; only answered by our interceptor
-const FONT_FILE = /^noto-sans-sc-\d+-400-normal\.woff2$/;
+export const FONT_FILE = /^noto-sans-sc-[a-z0-9-]+-400-normal\.woff2$/; // numbered CJK chunks + latin/latin-ext/vietnamese/cyrillic
 
 let fontCss: string | undefined;
 function getFontCss() {
@@ -27,17 +27,18 @@ p { margin: 0 0 0.6em; }
 
 async function launch() {
   if (process.env.VERCEL) {
-    return puppeteer.launch({ executablePath: await chromium.executablePath(), args: chromium.args, headless: true });
+    return puppeteer.launch({ executablePath: await chromium.executablePath(), args: chromium.args, headless: true, timeout: 20_000 });
   }
   const executablePath = process.env.CHROME_PATH;
   if (!executablePath) throw new Error('CHROME_PATH is not set');
-  return puppeteer.launch({ executablePath, headless: true });
+  return puppeteer.launch({ executablePath, headless: true, timeout: 20_000 });
 }
 
 export async function htmlToPdf(html: string): Promise<Buffer> {
   const browser = await launch();
   try {
     const page = await browser.newPage();
+    page.setDefaultTimeout(20_000); // stay under the route's maxDuration = 30
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
     page.on('request', async (req) => {

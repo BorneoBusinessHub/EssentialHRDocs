@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   // the tracer would otherwise ship the whole 75 MB package (all weights, .woff, scss)
   outputFileTracingExcludes: {
     '/api/export/pdf': [
-      './node_modules/@fontsource/noto-sans-sc/files/*-{100,200,300,500,600,700,800,900}-*',
+      './node_modules/@fontsource/noto-sans-sc/files/*-{100,200,300,500,600,700,800,900}-normal*',
       './node_modules/@fontsource/noto-sans-sc/files/*.woff',
       './node_modules/@fontsource/noto-sans-sc/scss/**',
       './node_modules/@fontsource/noto-sans-sc/*-*.css',

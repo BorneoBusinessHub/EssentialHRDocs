@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { exportFilename, contentDisposition } from '@/lib/export/filename';
 import { htmlToDocx } from '@/lib/export/docx';
-import { htmlToPdf } from '@/lib/export/pdf';
+import { htmlToPdf, FONT_FILE } from '@/lib/export/pdf';
 
 describe('exportFilename', () => {
   it('slugs the title and dates it in MYT', () => {
@@ -22,6 +22,17 @@ describe('htmlToDocx', () => {
   it('returns a zip', async () => {
     const docx = await htmlToDocx('<p>Hello</p>');
     expect(docx.subarray(0, 2).toString()).toBe('PK');
+  });
+});
+
+describe('FONT_FILE (interceptor name check)', () => {
+  it('accepts CJK chunks and the latin/vietnamese subsets', () => {
+    for (const n of ['noto-sans-sc-latin-400-normal.woff2', 'noto-sans-sc-latin-ext-400-normal.woff2', 'noto-sans-sc-100-400-normal.woff2'])
+      expect(FONT_FILE.test(n)).toBe(true);
+  });
+  it('rejects traversal and wrong extensions', () => {
+    for (const n of ['../x.woff2', 'noto-sans-sc-1-400-normal.woff2.js', 'noto-sans-sc-../x-400-normal.woff2', 'noto-sans-sc-1-400-normalxwoff2'])
+      expect(FONT_FILE.test(n)).toBe(false);
   });
 });
 
