@@ -60,6 +60,8 @@ export function FillEdit({ userId, templateId, title, html: tpl, fields }: { use
         body: JSON.stringify({ html, title }),
       });
       if (res.status === 401) {
+        // full reload on purpose: drop all client state once the session is gone
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination
         window.location.href = '/login?reason=expired';
         return;
       }
@@ -134,7 +136,7 @@ export function FillEdit({ userId, templateId, title, html: tpl, fields }: { use
           </label>
           <input
             id={`f-${f.key}`}
-            value={values[f.key] ?? ''}
+            value={Object.hasOwn(values, f.key) ? values[f.key] : ''}
             onChange={(e) => setValues({ ...values, [f.key]: e.target.value })}
             aria-describedby={f.hint ? `h-${f.key}` : undefined}
             className="rounded border border-gray-300 px-3 py-2"

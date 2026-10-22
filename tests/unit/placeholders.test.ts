@@ -62,6 +62,9 @@ describe('fillTemplate', () => {
   it('normalizes split placeholders first', () => {
     expect(fillTemplate('<p>{{na<em>me</em>}}</p>', f, { name: 'Ann' })).toBe('<p>Ann</p>');
   });
+  it('ignores inherited keys like constructor', () => {
+    expect(fillTemplate('<p>{{constructor}}</p>', [{ key: 'constructor', label: 'Ctor' }], {})).toBe('<p>[Ctor]</p>');
+  });
 });
 
 describe('mergeFields / canPublish', () => {

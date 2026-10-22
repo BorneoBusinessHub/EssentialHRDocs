@@ -12,7 +12,7 @@ export function Editor({ id, init, published, l }: { id: string; init: Meta; pub
     const tags = String(fd.get('tags') ?? '').split(',').map((t) => t.trim()).filter(Boolean);
     return saveTemplateMeta(id, { title: String(fd.get('title')), category: String(fd.get('category')), description: String(fd.get('description')), tags, fields });
   }, null);
-  const [s2, toggle] = useActionState(async (_: Result | null) => setPublished(id, !published), null);
+  const [s2, toggle] = useActionState<Result | null>(async () => setPublished(id, !published), null);
   const missing = fields.filter((f) => !f.label.trim()).map((f) => f.key);
   const note = (s: Result | null) => s && (s.ok ? <span className="text-green-700">{l.saved}</span> : <span role="alert" className="text-red-700">{s.error}</span>);
   const set = (i: number, patch: Partial<Field>) => setFields((fs) => fs.map((f, j) => (j === i ? { ...f, ...patch } : f)));

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { requireAdmin } from '@/lib/access';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { detectKeys } from '@/lib/placeholders';
 import { sanitizeDocHtml } from '@/lib/export/sanitize';
@@ -8,6 +9,7 @@ import { Editor, type EditorL } from '../editor';
 import { UploadForm } from '../upload-form';
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdmin();
   const { id } = await params;
   const t = await getTranslations('admin');
   const { data: tpl } = await createAdminClient().from('templates').select('*').eq('id', id).maybeSingle<Template>();

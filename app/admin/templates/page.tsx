@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { requireAdmin } from '@/lib/access';
 import { createAdminClient } from '@/lib/supabase/admin';
 import type { Template } from '@/lib/types';
 import { UploadForm } from './upload-form';
 
 export default async function TemplatesPage() {
+  await requireAdmin();
   const t = await getTranslations('admin');
   const { data } = await createAdminClient()
     .from('templates')

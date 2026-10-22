@@ -6,7 +6,11 @@
     "language": "Language",
     "lang_en": "English",
     "lang_ms": "Bahasa Malaysia",
-    "lang_zh": "中文"
+    "lang_zh": "中文",
+    "errorTitle": "Something went wrong.",
+    "retry": "Try again",
+    "notFound": "Page not found.",
+    "backHome": "Back to home"
   },
   "login": {
     "title": "Sign in",

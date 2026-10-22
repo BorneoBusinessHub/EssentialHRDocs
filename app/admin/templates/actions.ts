@@ -10,7 +10,7 @@ import type { Field } from '@/lib/types';
 export type Result = { ok: true; id?: string; warnings?: string[] } | { ok: false; error: string };
 
 const DOCX_TYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-const MAX_BYTES = 5 * 1024 * 1024;
+const MAX_BYTES = 4 * 1024 * 1024; // Vercel request body limit is 4.5 MB
 const id = z.uuid();
 const fieldSchema = z.object({ key: z.string().regex(/^[a-z0-9_]+$/), label: z.string().trim(), hint: z.string().trim().optional() });
 const metaSchema = z.object({
@@ -32,7 +32,7 @@ export async function uploadTemplate(formData: FormData): Promise<Result> {
   try {
     const file = formData.get('file');
     if (!(file instanceof File) || !file.name.toLowerCase().endsWith('.docx')) return fail(new Error('Please choose a .docx file'));
-    if (file.size > MAX_BYTES) return fail(new Error('File is larger than 5 MB'));
+    if (file.size > MAX_BYTES) return fail(new Error('File is larger than 4 MB'));
     const rawId = formData.get('id');
     const existing = typeof rawId === 'string' && rawId ? id.parse(rawId) : null;
 

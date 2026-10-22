@@ -7,7 +7,7 @@ type L = { expires: string; extend: string; newPassword: string; resetPassword: 
 export function RowActions({ id, disabled, expiresAt, today, l }: { id: string; disabled: boolean; expiresAt: string; today: string; l: L }) {
   const [s1, extend] = useActionState(async (_: Result | null, fd: FormData) => extendExpiry(id, String(fd.get('expires_at'))), null);
   const [s2, reset] = useActionState(async (_: Result | null, fd: FormData) => resetPassword(id, String(fd.get('password'))), null);
-  const [s3, toggle] = useActionState(async (_: Result | null) => setDisabled(id, !disabled), null);
+  const [s3, toggle] = useActionState<Result | null>(async () => setDisabled(id, !disabled), null);
   const note = (s: Result | null) =>
     s && (s.ok ? <span className="text-green-700">{l.saved}</span> : <span role="alert" className="text-red-700">{s.error}</span>);
   return (

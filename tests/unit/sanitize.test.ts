@@ -8,4 +8,8 @@ describe('sanitizeDocHtml', () => {
   it('keeps only text-align styles', () => {
     expect(sanitizeDocHtml('<p style="text-align:center;color:red">a</p>')).toBe('<p style="text-align:center">a</p>');
   });
+  it('keeps h4-h6, blockquote and hr', () => {
+    const html = '<h4>a</h4><h5>b</h5><h6>c</h6><blockquote>q</blockquote><hr />';
+    expect(sanitizeDocHtml(html)).toBe(html);
+  });
 });

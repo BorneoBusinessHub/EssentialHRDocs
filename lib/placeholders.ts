@@ -29,7 +29,7 @@ export function fillTemplate(html: string, fields: Field[], values: Record<strin
   const labels = new Map(fields.map((f) => [f.key, f.label]));
   return normalizePlaceholders(html).replace(VALID, (whole, key: string) => {
     if (!labels.has(key)) return whole;
-    const v = values[key];
+    const v = Object.hasOwn(values, key) ? values[key] : undefined;
     return v && v.trim() ? esc(v) : `[${esc(labels.get(key)!)}]`;
   });
 }

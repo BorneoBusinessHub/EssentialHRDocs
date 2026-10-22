@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { requireAdmin } from '@/lib/access';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { accountStatus } from '@/lib/accounts';
 import { todayMYT } from '@/lib/time';
@@ -10,6 +11,7 @@ const STATUSES = ['active', 'expiring', 'expired', 'disabled'] as const;
 const badge = { active: 'bg-green-100', expiring: 'bg-yellow-100', expired: 'bg-red-100', disabled: 'bg-zinc-200' };
 
 export default async function AccountsPage({ searchParams }: { searchParams: Promise<{ q?: string; status?: string }> }) {
+  await requireAdmin();
   const { q = '', status = '' } = await searchParams;
   const t = await getTranslations('admin');
   const db = createAdminClient();
@@ -17,7 +19,8 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
 
   const { data } = await db.from('profiles').select('*').eq('role', 'customer').order('expires_at', { ascending: true }).returns<Profile[]>();
   // ponytail: listUsers is capped at 1000 users; page through it (page param) if customers exceed that
-  const { data: users } = await db.auth.admin.listUsers({ perPage: 1000 });
+  const { data: users, error: usersError } = await db.auth.admin.listUsers({ perPage: 1000 });
+  if (usersError) console.error('listUsers failed', usersError);
   const emails = new Map(users?.users.map((u) => [u.id, u.email ?? '']));
 
   const needle = q.trim().toLowerCase();

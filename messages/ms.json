@@ -6,7 +6,11 @@
     "language": "Bahasa",
     "lang_en": "English",
     "lang_ms": "Bahasa Malaysia",
-    "lang_zh": "中文"
+    "lang_zh": "中文",
+    "errorTitle": "Ada masalah berlaku.",
+    "retry": "Cuba lagi",
+    "notFound": "Halaman tidak dijumpai.",
+    "backHome": "Kembali ke laman utama"
   },
   "login": {
     "title": "Log masuk",

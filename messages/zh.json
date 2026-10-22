@@ -6,7 +6,11 @@
     "language": "语言",
     "lang_en": "English",
     "lang_ms": "Bahasa Malaysia",
-    "lang_zh": "中文"
+    "lang_zh": "中文",
+    "errorTitle": "出错了。",
+    "retry": "重试",
+    "notFound": "找不到该页面。",
+    "backHome": "返回首页"
   },
   "login": {
     "title": "登录",
