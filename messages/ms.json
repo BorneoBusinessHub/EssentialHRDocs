@@ -19,12 +19,28 @@
   },
   "ask": {
     "aiFailure": "Tidak dapat menganalisis sekarang. Cuba lagi atau layari perpustakaan.",
-    "limit": "Anda telah mencapai had hari ini. Ia ditetapkan semula pada tengah malam (waktu Malaysia)."
+    "limit": "Anda telah mencapai had hari ini. Ia ditetapkan semula pada tengah malam (waktu Malaysia).",
+    "title": "Terangkan situasi HR anda",
+    "placeholder": "Terangkan apa yang berlaku…",
+    "submit": "Cari dokumen",
+    "pending": "Menganalisis…",
+    "invalid": "Sila masukkan soalan (maksimum 2000 aksara).",
+    "browseLibrary": "Layari pustaka",
+    "example1": "Pekerja sentiasa lewat, sudah beri amaran lisan dua kali.",
+    "example2": "Pekerja mahu berhenti, berapa lama notis diperlukan?",
+    "example3": "Saya mahu mengambil pekerja sambilan, kontrak apa yang diperlukan?"
   },
   "result": {
-    "disclaimer": "Ini adalah panduan umum, bukan nasihat undang-undang."
+    "disclaimer": "Ini adalah panduan umum, bukan nasihat undang-undang.",
+    "useTemplate": "Guna templat ini"
   },
-  "library": {},
+  "library": {
+    "title": "Pustaka templat",
+    "search": "Cari templat",
+    "searchBtn": "Cari",
+    "all": "Semua",
+    "empty": "Tiada templat dijumpai."
+  },
   "fill": {
     "exportFailed": "Muat turun gagal, sila cuba lagi."
   },

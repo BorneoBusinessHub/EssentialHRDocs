@@ -19,12 +19,28 @@
   },
   "ask": {
     "aiFailure": "Couldn't analyse right now. Try again or browse the library.",
-    "limit": "You've reached today's limit. It resets at midnight (Malaysia time)."
+    "limit": "You've reached today's limit. It resets at midnight (Malaysia time).",
+    "title": "Describe your HR situation",
+    "placeholder": "Describe what is happening…",
+    "submit": "Find documents",
+    "pending": "Analysing…",
+    "invalid": "Please enter a question (up to 2000 characters).",
+    "browseLibrary": "Browse the library",
+    "example1": "Staff keeps coming late, already gave verbal warning twice.",
+    "example2": "Employee wants to resign, how much notice is needed?",
+    "example3": "I want to hire a part-timer, what contract do I need?"
   },
   "result": {
-    "disclaimer": "This is general guidance, not legal advice."
+    "disclaimer": "This is general guidance, not legal advice.",
+    "useTemplate": "Use this template"
   },
-  "library": {},
+  "library": {
+    "title": "Template library",
+    "search": "Search templates",
+    "searchBtn": "Search",
+    "all": "All",
+    "empty": "No templates found."
+  },
   "fill": {
     "exportFailed": "Download failed, please try again."
   },

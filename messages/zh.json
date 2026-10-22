@@ -19,12 +19,28 @@
   },
   "ask": {
     "aiFailure": "暂时无法分析。请重试或浏览文件库。",
-    "limit": "您已达到今日使用上限，将于午夜（马来西亚时间）重置。"
+    "limit": "您已达到今日使用上限，将于午夜（马来西亚时间）重置。",
+    "title": "描述您的人事情况",
+    "placeholder": "请描述发生了什么…",
+    "submit": "查找文件",
+    "pending": "分析中…",
+    "invalid": "请输入问题（最多2000个字符）。",
+    "browseLibrary": "浏览模板库",
+    "example1": "员工经常迟到，已口头警告两次。",
+    "example2": "员工想辞职，需要提前多久通知？",
+    "example3": "我想聘请兼职员工，需要什么合同？"
   },
   "result": {
-    "disclaimer": "此内容仅为一般性指引，不构成法律意见。"
+    "disclaimer": "此内容仅为一般性指引，不构成法律意见。",
+    "useTemplate": "使用此模板"
   },
-  "library": {},
+  "library": {
+    "title": "模板库",
+    "search": "搜索模板",
+    "searchBtn": "搜索",
+    "all": "全部",
+    "empty": "未找到模板。"
+  },
   "fill": {
     "exportFailed": "下载失败，请重试。"
   },
