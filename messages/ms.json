@@ -42,7 +42,30 @@
     "empty": "Tiada templat dijumpai."
   },
   "fill": {
-    "exportFailed": "Muat turun gagal, sila cuba lagi."
+    "exportFailed": "Muat turun gagal, sila cuba lagi.",
+    "continue": "Teruskan",
+    "back": "Kembali ke borang",
+    "confirmBack": "Kembali akan membuang suntingan anda. Teruskan?",
+    "downloadDocx": "Muat turun Word",
+    "downloadPdf": "Muat turun PDF",
+    "fillTitle": "Isi maklumat",
+    "editHint": "Sunting teks di bawah, kemudian muat turun.",
+    "bold": "Tebal",
+    "italic": "Condong",
+    "underline": "Garis bawah",
+    "h1": "Tajuk 1",
+    "h2": "Tajuk 2",
+    "h3": "Tajuk 3",
+    "bullets": "Senarai berpeluru",
+    "numbers": "Senarai bernombor",
+    "insertTable": "Sisip jadual",
+    "addRow": "Tambah baris",
+    "delRow": "Padam baris",
+    "addCol": "Tambah lajur",
+    "delCol": "Padam lajur",
+    "alignLeft": "Jajar kiri",
+    "alignCenter": "Jajar tengah",
+    "alignRight": "Jajar kanan"
   },
   "admin": {
     "navAccounts": "Akaun",
