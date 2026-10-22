@@ -28,5 +28,29 @@
   "fill": {
     "exportFailed": "Download failed, please try again."
   },
-  "admin": {}
+  "admin": {
+    "navAccounts": "Accounts",
+    "navTemplates": "Templates",
+    "navQuestions": "Questions",
+    "company": "Company",
+    "email": "Email",
+    "password": "Password",
+    "expires": "Expiry date",
+    "create": "Create account",
+    "created": "Account created",
+    "search": "Search company or email",
+    "allStatuses": "All statuses",
+    "filter": "Filter",
+    "status": "Status",
+    "actions": "Actions",
+    "status_active": "Active",
+    "status_expiring": "Expiring",
+    "status_expired": "Expired",
+    "status_disabled": "Disabled",
+    "extend": "Set expiry",
+    "newPassword": "New password",
+    "resetPassword": "Reset password",
+    "enable": "Enable",
+    "disable": "Disable"
+  }
 }

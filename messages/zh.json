@@ -28,5 +28,29 @@
   "fill": {
     "exportFailed": "下载失败，请重试。"
   },
-  "admin": {}
+  "admin": {
+    "navAccounts": "账户",
+    "navTemplates": "模板",
+    "navQuestions": "问题",
+    "company": "公司",
+    "email": "电子邮件",
+    "password": "密码",
+    "expires": "到期日",
+    "create": "创建账户",
+    "created": "账户已创建",
+    "search": "搜索公司或电子邮件",
+    "allStatuses": "所有状态",
+    "filter": "筛选",
+    "status": "状态",
+    "actions": "操作",
+    "status_active": "有效",
+    "status_expiring": "即将到期",
+    "status_expired": "已过期",
+    "status_disabled": "已停用",
+    "extend": "设置到期日",
+    "newPassword": "新密码",
+    "resetPassword": "重置密码",
+    "enable": "启用",
+    "disable": "停用"
+  }
 }

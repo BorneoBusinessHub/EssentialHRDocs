@@ -28,5 +28,29 @@
   "fill": {
     "exportFailed": "Muat turun gagal, sila cuba lagi."
   },
-  "admin": {}
+  "admin": {
+    "navAccounts": "Akaun",
+    "navTemplates": "Templat",
+    "navQuestions": "Soalan",
+    "company": "Syarikat",
+    "email": "E-mel",
+    "password": "Kata laluan",
+    "expires": "Tarikh tamat",
+    "create": "Cipta akaun",
+    "created": "Akaun dicipta",
+    "search": "Cari syarikat atau e-mel",
+    "allStatuses": "Semua status",
+    "filter": "Tapis",
+    "status": "Status",
+    "actions": "Tindakan",
+    "status_active": "Aktif",
+    "status_expiring": "Hampir tamat",
+    "status_expired": "Tamat tempoh",
+    "status_disabled": "Dinyahaktifkan",
+    "extend": "Tetapkan tarikh tamat",
+    "newPassword": "Kata laluan baharu",
+    "resetPassword": "Tetap semula kata laluan",
+    "enable": "Aktifkan",
+    "disable": "Nyahaktifkan"
+  }
 }
