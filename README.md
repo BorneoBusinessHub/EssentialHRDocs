@@ -17,6 +17,7 @@ Requires Node.js 20.12+ (the scripts use `process.loadEnvFile`).
 | `ANTHROPIC_API_KEY` | console.anthropic.com > API Keys |
 
 3. Apply the schema: open Supabase dashboard > SQL Editor, paste `supabase/migrations/0001_init.sql` and run it.
+   Then turn off public sign-up (accounts are created by the admin only): Supabase dashboard > Authentication > Providers / Sign In > Email, disable "Allow new users to sign up".
 4. Create the first admin:
 
 ```bash
@@ -24,10 +25,11 @@ npx tsx scripts/seed-admin.ts <email> <password>
 ```
 
 5. `npm run dev` and open http://localhost:3000. Log in as the admin to create customer accounts and upload templates.
+   PDF export outside Vercel launches a local Chrome: set `CHROME_PATH` in `.env.local` to its executable (for example `C:\Program Files\Google\Chrome\Application\chrome.exe` or `/usr/bin/google-chrome`). Set it for `npm run e2e` too if you test PDF download there.
 
 ## Testing
 
-- Unit tests: `npm test`
+- Unit tests: `npm test`. The PDF test is skipped unless `CHROME_PATH` points at a local Chrome or Chromium, for example `CHROME_PATH="C:\Program Files\Google\Chrome\Application\chrome.exe" npm test`.
 - End-to-end: needs a Supabase project with a seeded customer, an expired customer, and at least one published template. Browsers must be installed once with `npx playwright install chromium`.
 
 ```bash
@@ -44,7 +46,7 @@ npm run e2e
 Upload a `.docx` in Admin > Templates. Rules:
 
 - Mark each blank as `{{snake_case_key}}`: lowercase letters, digits and underscores only (for example `{{employee_name}}`, `{{notice_days}}`).
-- The file must be 5 MB or smaller.
+- The file must be 4 MB or smaller.
 - Keep each blank inside a single paragraph or table cell; do not split it across paragraphs.
 - Give every blank a label (and optional hint) before publishing; customers see the label on the fill form.
 - Only published templates are visible to customers and offered by the AI.
@@ -55,4 +57,4 @@ Upload a `.docx` in Admin > Templates. Rules:
 2. Set the four environment variables above (Production, and Preview if used).
 3. Deploy. The production URL should show the login page. Do not set `AI_STUB` in production.
 
-PDF export runs in a serverless route using `puppeteer-core` with `@sparticuz/chromium`; it needs no extra configuration on Vercel, but cold starts can take a few seconds.
+PDF export runs in a serverless route using `puppeteer-core` with `@sparticuz/chromium`. `next.config.ts` traces the Chromium binary and CJK fonts into that function, but this has not been verified on a real deployment: before going live, download a PDF (including Chinese text) from a Vercel preview deploy. Cold starts can take a few seconds.
