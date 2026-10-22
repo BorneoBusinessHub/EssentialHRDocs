@@ -43,3 +43,8 @@ export function canPublish(fields: Field[]): { ok: boolean; missing: string[] } 
   const missing = fields.filter((f) => !f.label.trim()).map((f) => f.key);
   return { ok: missing.length === 0, missing };
 }
+
+// Keep only submitted fields whose key still exists in the html (in html order); new keys get empty labels.
+export function reconcileFields(input: Field[], html: string): Field[] {
+  return mergeFields(input, detectKeys(html).keys);
+}

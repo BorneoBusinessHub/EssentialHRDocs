@@ -4,11 +4,12 @@ import { z } from 'zod';
 import { requireAdmin } from '@/lib/access';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { docxToHtml } from '@/lib/convert';
-import { canPublish, detectKeys, mergeFields } from '@/lib/placeholders';
+import { canPublish, detectKeys, mergeFields, reconcileFields } from '@/lib/placeholders';
 import type { Field } from '@/lib/types';
 
 export type Result = { ok: true; id?: string; warnings?: string[] } | { ok: false; error: string };
 
+const DOCX_TYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const MAX_BYTES = 5 * 1024 * 1024;
 const id = z.uuid();
 const fieldSchema = z.object({ key: z.string().regex(/^[a-z0-9_]+$/), label: z.string().trim(), hint: z.string().trim().optional() });
@@ -46,12 +47,15 @@ export async function uploadTemplate(formData: FormData): Promise<Result> {
     const db = createAdminClient();
     const tid = existing ?? crypto.randomUUID();
     const docx_path = `${tid}.docx`;
-    const up = await db.storage.from('templates').upload(docx_path, buf, { upsert: true, contentType: file.type || 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    let old: { fields: Field[]; published: boolean } | null = null;
+    if (existing) {
+      ({ data: old } = await db.from('templates').select('fields, published').eq('id', tid).maybeSingle<{ fields: Field[]; published: boolean }>());
+      if (!old) return fail(new Error('Template not found'));
+    }
+    const up = await db.storage.from('templates').upload(docx_path, buf, { upsert: true, contentType: DOCX_TYPE });
     if (up.error) return fail(new Error(up.error.message));
 
-    if (existing) {
-      const { data: old } = await db.from('templates').select('fields, published').eq('id', tid).single<{ fields: Field[]; published: boolean }>();
-      if (!old) return fail(new Error('Template not found'));
+    if (existing && old) {
       const fields = mergeFields(old.fields, keys);
       const { error } = await db
         .from('templates')
@@ -81,8 +85,11 @@ export async function saveTemplateMeta(
   try {
     const tid = id.parse(templateId);
     const v = metaSchema.parse(input);
-    const fields: Field[] = v.fields.map((f) => (f.hint ? { key: f.key, label: f.label, hint: f.hint } : { key: f.key, label: f.label }));
-    const { data, error } = await createAdminClient()
+    const db = createAdminClient();
+    const { data: row } = await db.from('templates').select('html').eq('id', tid).maybeSingle<{ html: string }>();
+    if (!row) return fail(new Error('Template not found'));
+    const fields: Field[] = reconcileFields(v.fields.map((f) => (f.hint ? { key: f.key, label: f.label, hint: f.hint } : { key: f.key, label: f.label })), row.html);
+    const { data, error } = await db
       .from('templates')
       .update({ title: v.title, category: v.category, description: v.description, tags: v.tags, fields, ...(canPublish(fields).ok ? {} : { published: false }), updated_at: new Date().toISOString() })
       .eq('id', tid)

@@ -28,7 +28,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ id: s
           <ul className="list-disc pl-5">{warnings.map((w) => <li key={w}>{w}</li>)}</ul>
         </div>
       )}
-      <Editor id={id} init={{ title: tpl.title, category: tpl.category, description: tpl.description, tags: tpl.tags, fields: tpl.fields }} published={tpl.published} l={l} />
+      <Editor key={tpl.updated_at} id={id} init={{ title: tpl.title, category: tpl.category, description: tpl.description, tags: tpl.tags, fields: tpl.fields }} published={tpl.published} l={l} />
       <h2 className="font-semibold">{t('preview')}</h2>
       <div className="rounded border p-4" dangerouslySetInnerHTML={{ __html: sanitizeDocHtml(tpl.html) }} />
     </div>

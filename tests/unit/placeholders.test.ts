@@ -74,3 +74,11 @@ describe('mergeFields / canPublish', () => {
     expect(canPublish([{ key: 'a', label: 'A' }])).toEqual({ ok: true, missing: [] });
   });
 });
+
+import { reconcileFields } from '@/lib/placeholders';
+describe('reconcileFields', () => {
+  it('drops stale keys and adds new unlabelled ones', () => {
+    const out = reconcileFields([{ key: 'old', label: 'Old' }, { key: 'date', label: 'Date' }], '<p>{{date}} {{new_key}}</p>');
+    expect(out).toEqual([{ key: 'date', label: 'Date' }, { key: 'new_key', label: '' }]);
+  });
+});
