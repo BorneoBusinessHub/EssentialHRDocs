@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/access';
-import { logout } from '@/app/login/actions';
+import { LogoutButton } from '@/components/logout-button';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   await requireAdmin();
@@ -13,9 +13,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <Link href="/admin/accounts">{t('navAccounts')}</Link>
         <Link href="/admin/templates">{t('navTemplates')}</Link>
         <Link href="/admin/questions">{t('navQuestions')}</Link>
-        <form action={logout} className="ml-auto">
-          <button type="submit" className="underline">{tc('logout')}</button>
-        </form>
+        <LogoutButton label={tc('logout')} />
       </header>
       <main className="p-6">{children}</main>
     </div>

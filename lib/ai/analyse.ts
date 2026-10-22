@@ -2,6 +2,7 @@
 
 import { getLocale } from 'next-intl/server';
 import { requireUser } from '@/lib/access';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { startOfDayMYT } from '@/lib/time';
 import type { Locale, TemplateSummary } from '@/lib/types';
 import type { Analysis } from './parse';
@@ -33,7 +34,8 @@ export async function analyse(question: string): Promise<AnalyseResult> {
   const published = (data ?? []) as TemplateSummary[];
 
   const analysis = await runAnalysis(q, locale, published);
-  const { error: insertError } = await supabase.from('ai_queries').insert({ user_id: user.id, question: q, locale, response: analysis });
+  // service role: no insert policy exists, so users cannot write crafted rows directly
+  const { error: insertError } = await createAdminClient().from('ai_queries').insert({ user_id: user.id, question: q, locale, response: analysis });
   if (insertError) console.error('ai_queries insert failed', insertError);
   if (!analysis) return { status: 'error' };
 

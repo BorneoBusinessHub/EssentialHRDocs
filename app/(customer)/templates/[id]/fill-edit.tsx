@@ -14,7 +14,7 @@ const store = () => {
   }
 };
 
-export function FillEdit({ templateId, title, html: tpl, fields }: { templateId: string; title: string; html: string; fields: Field[] }) {
+export function FillEdit({ userId, templateId, title, html: tpl, fields }: { userId: string; templateId: string; title: string; html: string; fields: Field[] }) {
   const t = useTranslations('fill');
   const [values, setValues] = useState<Record<string, string>>({});
   const [html, setHtml] = useState<string | null>(null);
@@ -26,7 +26,7 @@ export function FillEdit({ templateId, title, html: tpl, fields }: { templateId:
   // Restore draft once on mount (storage is only available client-side).
   useEffect(() => {
     const s = store();
-    const d = s && loadDraft(templateId, s);
+    const d = s && loadDraft(userId, templateId, s);
     /* eslint-disable react-hooks/set-state-in-effect */
     if (d) {
       setValues(d.values);
@@ -37,7 +37,7 @@ export function FillEdit({ templateId, title, html: tpl, fields }: { templateId:
     }
     setReady(true);
     /* eslint-enable react-hooks/set-state-in-effect */
-  }, [templateId]);
+  }, [userId, templateId]);
 
   // Debounced autosave; skipped until restore has run so we never clobber a draft.
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -45,10 +45,10 @@ export function FillEdit({ templateId, title, html: tpl, fields }: { templateId:
     if (!ready) return;
     timer.current = setTimeout(() => {
       const s = store();
-      if (s) saveDraft(templateId, { values, html, step }, s);
+      if (s) saveDraft(userId, templateId, { values, html, step }, s);
     }, 500);
     return () => clearTimeout(timer.current);
-  }, [ready, templateId, values, html, step]);
+  }, [ready, userId, templateId, values, html, step]);
 
   async function download(kind: 'docx' | 'pdf') {
     setError(false);
@@ -59,6 +59,10 @@ export function FillEdit({ templateId, title, html: tpl, fields }: { templateId:
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ html, title }),
       });
+      if (res.status === 401) {
+        window.location.href = '/login?reason=expired';
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
       const cd = res.headers.get('Content-Disposition') ?? '';
       const name = /filename\*=UTF-8''([^;]+)/i.exec(cd)?.[1] ?? /filename="?([^";]+)"?/i.exec(cd)?.[1];
@@ -67,7 +71,7 @@ export function FillEdit({ templateId, title, html: tpl, fields }: { templateId:
       a.href = url;
       a.download = name ? decodeURIComponent(name) : `document.${kind}`;
       a.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 0);
     } catch {
       setError(true);
     } finally {

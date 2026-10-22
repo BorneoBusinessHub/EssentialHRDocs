@@ -5,7 +5,6 @@ import { escapeIlike } from '@/lib/ilike';
 
 type SP = { q?: string; category?: string };
 
-// ponytail: tags are not searched (title/description only); add a tags.cs filter if needed.
 export default async function LibraryPage({ searchParams }: { searchParams: Promise<SP> }) {
   const { q = '', category = '' } = await searchParams;
   const t = await getTranslations('library');
@@ -13,7 +12,7 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
 
   let query = supabase.from('templates').select('id, title, category, description').eq('published', true).order('title');
   const safe = escapeIlike(q);
-  if (safe) query = query.or(`title.ilike.%${safe}%,description.ilike.%${safe}%`);
+  if (safe) query = query.or(`title.ilike.%${safe}%,description.ilike.%${safe}%,tags.cs.{${safe}}`);
   if (category) query = query.eq('category', category);
   const [{ data }, { data: cats }] = await Promise.all([
     query,

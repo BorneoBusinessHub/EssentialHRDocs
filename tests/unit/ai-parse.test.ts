@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseAnalysis } from '@/lib/ai/parse';
+import { parseAnalysis, safeAnalysis } from '@/lib/ai/parse';
 
 const ids = new Set(['t1', 't2', 't3', 't4']);
 const ok = { is_hr: true, suggestion: ['a', 'b', 'c'], templates: [{ id: 't1', reason: 'r' }] };
@@ -24,5 +24,15 @@ describe('parseAnalysis', () => {
   });
   it('drops templates when not HR', () => {
     expect(parseAnalysis(JSON.stringify({ ...ok, is_hr: false }), ids)!.templates).toEqual([]);
+  });
+  it('keeps only the first 5 suggestion steps', () => {
+    const long = { ...ok, suggestion: ['1', '2', '3', '4', '5', '6', '7'] };
+    expect(parseAnalysis(JSON.stringify(long), ids)!.suggestion).toEqual(['1', '2', '3', '4', '5']);
+  });
+  it('safeAnalysis rejects crafted stored rows', () => {
+    expect(safeAnalysis(ok)).toEqual(ok);
+    expect(safeAnalysis(null)).toBeNull();
+    expect(safeAnalysis({ is_hr: true, suggestion: 'x', templates: 5 })).toBeNull();
+    expect(safeAnalysis({ is_hr: true, suggestion: [{ a: 1 }], templates: [] })).toBeNull();
   });
 });

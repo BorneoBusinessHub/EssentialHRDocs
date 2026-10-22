@@ -64,8 +64,11 @@ create policy templates_delete on public.templates for delete to authenticated u
 
 create policy ai_queries_select on public.ai_queries for select to authenticated
   using ((user_id = auth.uid() and public.is_active()) or public.is_admin());
-create policy ai_queries_insert on public.ai_queries for insert to authenticated
-  with check (user_id = auth.uid() and public.is_active());
+-- ai_queries: inserts only via service role (lib/ai/analyse.ts), so users cannot craft rows
+
+grant select on public.profiles, public.templates to authenticated;
+grant select on public.ai_queries to authenticated;
+grant all on public.profiles, public.templates, public.ai_queries to service_role;
 
 -- private bucket, no storage policies: service role only
 insert into storage.buckets (id, name, public) values ('templates','templates', false) on conflict do nothing;

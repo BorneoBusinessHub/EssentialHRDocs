@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/access';
+import { safeAnalysis } from '@/lib/ai/parse';
 
 const PER_PAGE = 100;
 const fmt = new Intl.DateTimeFormat('en-MY', { timeZone: 'Asia/Kuala_Lumpur', dateStyle: 'medium', timeStyle: 'short' });
@@ -10,7 +11,7 @@ type Row = {
   created_at: string;
   locale: string;
   question: string;
-  response: { is_hr: boolean; suggestion: string[]; templates: { id: string; reason: string }[] } | null;
+  response: unknown; // jsonb; validated with safeAnalysis before rendering
   profiles: { company_name: string } | null;
 };
 
@@ -29,9 +30,9 @@ export default async function QuestionsPage({ searchParams }: { searchParams: Pr
     .range(from, from + PER_PAGE - 1)
     .returns<Row[]>();
   if (error) throw error;
-  const rows = data ?? [];
+  const rows = (data ?? []).map((r) => ({ ...r, analysis: safeAnalysis(r.response) }));
 
-  const ids = [...new Set(rows.flatMap((r) => r.response?.templates?.map((x) => x.id) ?? []))];
+  const ids = [...new Set(rows.flatMap((r) => r.analysis?.templates.map((x) => x.id) ?? []))];
   const titles = new Map<string, string>();
   if (ids.length) {
     const { data: ts, error: tErr } = await supabase.from('templates').select('id, title').in('id', ids);
@@ -56,10 +57,10 @@ export default async function QuestionsPage({ searchParams }: { searchParams: Pr
               <td className="pr-2">{r.locale}</td>
               <td className="pr-2">{r.question}</td>
               <td>
-                {r.response ? (
+                {r.analysis ? (
                   <>
-                    <div>{r.response.suggestion.slice(0, 2).join(' / ')}{r.response.suggestion.length > 2 ? ' …' : ''}</div>
-                    <div className="text-zinc-600">{r.response.templates.map((x) => titles.get(x.id) ?? x.id).join(', ')}</div>
+                    <div>{r.analysis.suggestion.slice(0, 2).join(' / ')}{r.analysis.suggestion.length > 2 ? ' …' : ''}</div>
+                    <div className="text-zinc-600">{r.analysis.templates.map((x) => titles.get(x.id) ?? x.id).join(', ')}</div>
                   </>
                 ) : (
                   <span className="text-red-700">{t('qFailed')}</span>

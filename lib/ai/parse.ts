@@ -2,11 +2,14 @@ import { z } from 'zod';
 
 const schema = z.object({
   is_hr: z.boolean(),
-  suggestion: z.array(z.string()).min(1).max(5),
+  suggestion: z.array(z.string()).min(1).transform((s) => s.slice(0, 5)),
   templates: z.array(z.object({ id: z.string(), reason: z.string() })),
 });
 
 export type Analysis = z.infer<typeof schema>;
+
+// Validate a stored ai_queries.response; null when missing or malformed.
+export const safeAnalysis = (v: unknown): Analysis | null => schema.safeParse(v).data ?? null;
 
 export function parseAnalysis(raw: string, publishedIds: Set<string>): Analysis | null {
   try {
