@@ -51,6 +51,7 @@
     "newPassword": "新密码",
     "resetPassword": "重置密码",
     "enable": "启用",
-    "disable": "停用"
+    "disable": "停用",
+    "saved": "已保存"
   }
 }

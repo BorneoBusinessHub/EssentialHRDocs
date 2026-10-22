@@ -51,6 +51,7 @@
     "newPassword": "Kata laluan baharu",
     "resetPassword": "Tetap semula kata laluan",
     "enable": "Aktifkan",
-    "disable": "Nyahaktifkan"
+    "disable": "Nyahaktifkan",
+    "saved": "Disimpan"
   }
 }

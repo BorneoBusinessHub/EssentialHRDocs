@@ -41,8 +41,8 @@ export async function extendExpiry(userId: string, expires_at: string): Promise<
   await requireAdmin();
   try {
     const v = z.object({ id, expires_at: expiry }).parse({ id: userId, expires_at });
-    const { error } = await createAdminClient().from('profiles').update({ expires_at: v.expires_at }).eq('id', v.id);
-    return error ? fail(new Error(error.message)) : done();
+    const { data, error } = await createAdminClient().from('profiles').update({ expires_at: v.expires_at }).eq('id', v.id).eq('role', 'customer').select('id');
+    return error ? fail(new Error(error.message)) : data.length ? done() : fail(new Error('Account not found'));
   } catch (e) {
     return fail(e);
   }
@@ -52,8 +52,8 @@ export async function setDisabled(userId: string, disabled: boolean): Promise<Re
   await requireAdmin();
   try {
     const v = z.object({ id, disabled: z.boolean() }).parse({ id: userId, disabled });
-    const { error } = await createAdminClient().from('profiles').update({ disabled: v.disabled }).eq('id', v.id);
-    return error ? fail(new Error(error.message)) : done();
+    const { data, error } = await createAdminClient().from('profiles').update({ disabled: v.disabled }).eq('id', v.id).eq('role', 'customer').select('id');
+    return error ? fail(new Error(error.message)) : data.length ? done() : fail(new Error('Account not found'));
   } catch (e) {
     return fail(e);
   }
@@ -63,7 +63,10 @@ export async function resetPassword(userId: string, pw: string): Promise<Result>
   await requireAdmin();
   try {
     const v = z.object({ id, password }).parse({ id: userId, password: pw });
-    const { error } = await createAdminClient().auth.admin.updateUserById(v.id, { password: v.password });
+    const db = createAdminClient();
+    const { data: target } = await db.from('profiles').select('id').eq('id', v.id).eq('role', 'customer').maybeSingle();
+    if (!target) return fail(new Error('Account not found'));
+    const { error } = await db.auth.admin.updateUserById(v.id, { password: v.password });
     return error ? fail(new Error(error.message)) : done();
   } catch (e) {
     return fail(e);

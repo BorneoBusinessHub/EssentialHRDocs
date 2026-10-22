@@ -4,7 +4,7 @@ import { accountStatus } from '@/lib/accounts';
 import { todayMYT } from '@/lib/time';
 import type { Profile } from '@/lib/types';
 import { CreateForm } from './create-form';
-import { extendExpiry, resetPassword, setDisabled } from './actions';
+import { RowActions } from './row-actions';
 
 const STATUSES = ['active', 'expiring', 'expired', 'disabled'] as const;
 const badge = { active: 'bg-green-100', expiring: 'bg-yellow-100', expired: 'bg-red-100', disabled: 'bg-zinc-200' };
@@ -52,34 +52,13 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
               <td>{p.expires_at}</td>
               <td><span className={`rounded px-2 py-0.5 ${badge[s]}`}>{t(`status_${s}`)}</span></td>
               <td className="flex flex-col gap-1 py-2">
-                <form
-                  action={async (fd: FormData) => {
-                    'use server';
-                    await extendExpiry(p.id, String(fd.get('expires_at')));
-                  }}
-                  className="flex gap-1"
-                >
-                  <input name="expires_at" type="date" required min={todayMYT(now)} defaultValue={p.expires_at ?? ''} aria-label={t('expires')} className="rounded border p-1" />
-                  <button className="rounded border px-2">{t('extend')}</button>
-                </form>
-                <form
-                  action={async (fd: FormData) => {
-                    'use server';
-                    await resetPassword(p.id, String(fd.get('password')));
-                  }}
-                  className="flex gap-1"
-                >
-                  <input name="password" type="text" required minLength={8} placeholder={t('newPassword')} className="rounded border p-1" />
-                  <button className="rounded border px-2">{t('resetPassword')}</button>
-                </form>
-                <form
-                  action={async () => {
-                    'use server';
-                    await setDisabled(p.id, !p.disabled);
-                  }}
-                >
-                  <button className="rounded border px-2">{p.disabled ? t('enable') : t('disable')}</button>
-                </form>
+                <RowActions
+                  id={p.id}
+                  disabled={p.disabled}
+                  expiresAt={p.expires_at ?? ''}
+                  today={todayMYT(now)}
+                  l={{ expires: t('expires'), extend: t('extend'), newPassword: t('newPassword'), resetPassword: t('resetPassword'), enable: t('enable'), disable: t('disable'), saved: t('saved') }}
+                />
               </td>
             </tr>
           ))}

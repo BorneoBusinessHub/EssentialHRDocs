@@ -51,6 +51,7 @@
     "newPassword": "New password",
     "resetPassword": "Reset password",
     "enable": "Enable",
-    "disable": "Disable"
+    "disable": "Disable",
+    "saved": "Saved"
   }
 }
