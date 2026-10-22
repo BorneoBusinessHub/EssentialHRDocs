@@ -17,9 +17,9 @@ export function CreateForm({ l, today }: { l: L; today: string }) {
   );
   return (
     <form action={submit} className="flex flex-wrap items-end gap-2">
-      <input name="company_name" required placeholder={l.company} className="rounded border p-2" />
-      <input name="email" type="email" required placeholder={l.email} className="rounded border p-2" />
-      <input name="password" type="text" required minLength={8} placeholder={l.password} className="rounded border p-2" />
+      <input name="company_name" required placeholder={l.company} aria-label={l.company} className="rounded border p-2" />
+      <input name="email" type="email" required placeholder={l.email} aria-label={l.email} className="rounded border p-2" />
+      <input name="password" type="text" required minLength={8} placeholder={l.password} aria-label={l.password} className="rounded border p-2" />
       <input name="expires_at" type="date" required min={today} aria-label={l.expires} className="rounded border p-2" />
       <button disabled={pending} className="rounded bg-black p-2 text-white">{l.create}</button>
       {state && !state.ok && <p role="alert" className="w-full text-red-700">{state.error}</p>}

@@ -31,7 +31,7 @@ export default async function LibraryPage({ searchParams }: { searchParams: Prom
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-semibold">{t('title')}</h1>
       <form className="flex gap-2">
-        <input name="q" defaultValue={q} placeholder={t('search')} className="flex-1 rounded border p-2" />
+        <input name="q" defaultValue={q} placeholder={t('search')} aria-label={t('search')} className="flex-1 rounded border p-2" />
         {category && <input type="hidden" name="category" value={category} />}
         <button type="submit" className="rounded bg-black px-4 text-white">{t('searchBtn')}</button>
       </form>

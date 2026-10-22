@@ -8,7 +8,7 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000/login',
     env: { AI_STUB: '1' },
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 });

@@ -33,8 +33,8 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
         l={{ company: t('company'), email: t('email'), password: t('password'), expires: t('expires'), create: t('create'), created: t('created') }}
       />
       <form className="flex gap-2">
-        <input name="q" defaultValue={q} placeholder={t('search')} className="rounded border p-2" />
-        <select name="status" defaultValue={status} className="rounded border p-2">
+        <input name="q" defaultValue={q} placeholder={t('search')} aria-label={t('search')} className="rounded border p-2" />
+        <select name="status" defaultValue={status} aria-label={t('allStatuses')} className="rounded border p-2">
           <option value="">{t('allStatuses')}</option>
           {STATUSES.map((s) => <option key={s} value={s}>{t(`status_${s}`)}</option>)}
         </select>

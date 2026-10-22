@@ -4,6 +4,8 @@ A Next.js 16 + Supabase portal for Malaysian SMEs. Customers describe an HR situ
 
 ## Setup
 
+Requires Node.js 20.12+ (the scripts use `process.loadEnvFile`).
+
 1. `npm install`
 2. Copy `.env.example` to `.env.local` and fill in:
 
@@ -34,7 +36,7 @@ E2E_EXPIRED_EMAIL=... E2E_EXPIRED_PASSWORD=... \
 npm run e2e
 ```
 
-  The Playwright config starts the dev server with `AI_STUB=1`, so Claude is not called: the AI step returns a fixed answer pointing at the first published template. The stub is ignored when `NODE_ENV=production`. Tests skip themselves if the `E2E_*` variables are missing.
+  The Playwright config starts the dev server with `AI_STUB=1`, so Claude is not called: the AI step returns a fixed answer pointing at the first published template. The stub is ignored when `NODE_ENV=production`. Locally Playwright reuses a dev server already on port 3000, so stop any `npm run dev` running without `AI_STUB=1` first (in CI it always starts its own). Tests skip themselves if the `E2E_*` variables are missing.
 - AI quality eval: `npx tsx scripts/eval-ai.ts` reads `scripts/eval-cases.json` (`question`, `locale`, `expected_template_title`), asks Claude against the published templates and prints HIT/MISS per case and a total. Target: at least 18 of 20. The file ships with 3 example cases; extend it to 20 with real questions, using exact template titles.
 
 ## Authoring templates

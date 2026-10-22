@@ -17,8 +17,12 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <h1 className="text-2xl font-semibold">{t('title')}</h1>
       <Notice searchParams={searchParams} />
       <form action={login} className="flex flex-col gap-3">
-        <input name="email" type="email" required autoComplete="email" placeholder={t('email')} className="rounded border p-2" />
-        <input name="password" type="password" required autoComplete="current-password" placeholder={t('password')} className="rounded border p-2" />
+        <label htmlFor="email" className="flex flex-col gap-1 text-sm">{t('email')}
+          <input id="email" name="email" type="email" required autoComplete="email" className="rounded border p-2 text-base" />
+        </label>
+        <label htmlFor="password" className="flex flex-col gap-1 text-sm">{t('password')}
+          <input id="password" name="password" type="password" required autoComplete="current-password" className="rounded border p-2 text-base" />
+        </label>
         <button type="submit" className="rounded bg-black p-2 text-white">{t('submit')}</button>
       </form>
       <p className="text-sm text-zinc-600">{t('forgot')}</p>

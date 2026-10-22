@@ -21,6 +21,7 @@ export function AskForm() {
       <h1 className="text-2xl font-semibold">{t('title')}</h1>
       <form action={action} className="flex flex-col gap-3">
         <textarea
+          aria-label={t('placeholder')}
           name="question"
           value={text}
           onChange={(e) => setText(e.target.value)}

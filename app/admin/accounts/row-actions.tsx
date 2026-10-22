@@ -18,7 +18,7 @@ export function RowActions({ id, disabled, expiresAt, today, l }: { id: string; 
         {note(s1)}
       </form>
       <form action={reset} className="flex items-center gap-1">
-        <input name="password" type="text" required minLength={8} placeholder={l.newPassword} className="rounded border p-1" />
+        <input name="password" type="text" required minLength={8} placeholder={l.newPassword} aria-label={l.newPassword} className="rounded border p-1" />
         <button className="rounded border px-2">{l.resetPassword}</button>
         {note(s2)}
       </form>

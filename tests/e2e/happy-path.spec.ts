@@ -5,15 +5,15 @@ const { E2E_CUSTOMER_EMAIL: cEmail, E2E_CUSTOMER_PASSWORD: cPass, E2E_EXPIRED_EM
 
 async function login(page: Page, email: string, password: string) {
   await page.goto('/login');
-  await page.getByPlaceholder('Email').fill(email);
-  await page.getByPlaceholder('Password').fill(password);
+  await page.getByLabel('Email').fill(email);
+  await page.getByLabel('Password').fill(password);
   await page.getByRole('button', { name: 'Sign in' }).click();
 }
 
 test('customer: ask, fill, edit, download docx and pdf', async ({ page }) => {
   test.skip(!cEmail || !cPass, 'E2E_CUSTOMER_* not set');
   await login(page, cEmail!, cPass!);
-  await page.getByPlaceholder('Describe what is happening…').fill('Staff keeps coming late.');
+  await page.getByLabel('Describe what is happening…').fill('Staff keeps coming late.');
   await page.getByRole('button', { name: 'Find documents' }).click();
   await page.getByRole('link', { name: 'Use this template' }).first().click();
 
