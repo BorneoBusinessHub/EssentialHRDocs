@@ -23,31 +23,37 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  const deny = (reason: 'unauthorized' | 'expired') => {
-    const res = isApi
-      ? NextResponse.json({ error: reason }, { status: 401 })
-      : NextResponse.redirect(new URL(reason === 'expired' ? '/login?reason=expired' : '/login', request.url));
-    // keep any refreshed/cleared auth cookies
+  // keep any refreshed/cleared auth cookies on every redirect/401
+  const withCookies = (res: NextResponse) => {
     response.cookies.getAll().forEach((c) => res.cookies.set(c));
     return res;
   };
+  const deny = (reason: 'unauthorized' | 'expired') =>
+    withCookies(
+      isApi
+        ? NextResponse.json({ error: reason }, { status: 401 })
+        : NextResponse.redirect(new URL(reason === 'expired' ? '/login?reason=expired' : '/login', request.url)),
+    );
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return deny('unauthorized');
 
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single<Profile>();
   const access = checkAccess(profile, new Date());
-  if (access === 'no-session') return deny('unauthorized');
+  if (access === 'no-session') {
+    await supabase.auth.signOut();
+    return deny('unauthorized');
+  }
   if (access === 'expired') {
     await supabase.auth.signOut();
     return deny('expired');
   }
-  if (pathname.startsWith('/admin') && profile!.role !== 'admin') {
-    return NextResponse.redirect(new URL('/', request.url));
+  if ((pathname === '/admin' || pathname.startsWith('/admin/')) && profile!.role !== 'admin') {
+    return withCookies(NextResponse.redirect(new URL('/', request.url)));
   }
   return response;
 }
 
 export const config = {
-  matcher: ['/((?!login|_next|fonts|favicon\.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|css|js)$).*)'],
+  matcher: ['/((?!login|_next|fonts|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|css|js)$).*)'],
 };

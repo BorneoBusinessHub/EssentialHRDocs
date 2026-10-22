@@ -19,7 +19,10 @@ export async function requireUser() {
   if (!user) redirect('/login');
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single<Profile>();
   const access = checkAccess(profile, new Date());
-  if (access === 'no-session') redirect('/login');
+  if (access === 'no-session') {
+    await supabase.auth.signOut();
+    redirect('/login');
+  }
   if (access === 'expired') {
     await supabase.auth.signOut();
     redirect('/login?reason=expired');
