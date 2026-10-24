@@ -1,12 +1,14 @@
 'use client';
 import Link from 'next/link';
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ArrowRight, ArrowUpRight, Warning } from '@phosphor-icons/react';
 import { analyse, type AnalyseResult } from '@/lib/ai/analyse';
+import type { TemplateSummary } from '@/lib/types';
 
 type State = AnalyseResult | null;
 const stagger = (i: number) => ({ '--i': i }) as React.CSSProperties;
+const EXAMPLE_KEYS = ['example1', 'example2', 'example3', 'example4', 'example5', 'example6', 'example7', 'example8', 'example9', 'example10', 'example11'] as const;
 
 export function AskForm() {
   const t = useTranslations('ask');
@@ -16,7 +18,14 @@ export function AskForm() {
     async (_prev, fd) => analyse(String(fd.get('question') ?? '')),
     null,
   );
-  const examples = [t('example1'), t('example2'), t('example3')];
+  const examples = EXAMPLE_KEYS.map((k) => t(k));
+  // results render below the example list, so bring them into view after each answer
+  const results = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!state || state.status === 'invalid') return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    results.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }, [state]);
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-10">
@@ -55,12 +64,28 @@ export function AskForm() {
         </div>
       </form>
 
-      {state?.status === 'limit' && <Alert>{t('limit')}</Alert>}
+      <div ref={results} className="scroll-mt-28 flex flex-col gap-10 empty:hidden">
       {state?.status === 'error' && (
         <Alert>
           {t('aiFailure')}{' '}
           <Link href="/library" className="font-medium underline underline-offset-4">{t('browseLibrary')}</Link>
         </Alert>
+      )}
+      {state?.status === 'fallback' && (
+        <section className="flex flex-col gap-6">
+          <Alert>{state.reason === 'limit' ? t('limit') : t('fallbackNote')}</Alert>
+          {state.templates.length > 0 ? (
+            <>
+              <p className="text-[0.9375rem] text-muted">{t('fallbackMatches')}</p>
+              <TemplateCards items={state.templates} note={(tpl) => tpl.description} cta={tr('useTemplate')} />
+            </>
+          ) : (
+            <p className="text-[0.9375rem] text-muted">
+              {t('fallbackNone')}{' '}
+              <Link href="/library" className="font-medium text-ink underline underline-offset-4">{t('browseLibrary')}</Link>
+            </p>
+          )}
+        </section>
       )}
       {state?.status === 'ok' && (
         <section className="flex flex-col gap-8">
@@ -75,28 +100,37 @@ export function AskForm() {
             ))}
           </ol>
           {state.analysis.is_hr && (
-            <div className="grid gap-4 md:grid-cols-2">
-              {state.templates.slice(0, 3).map((tpl, i, shown) => (
-                // odd count: the top match spans the full row so the grid never leaves an empty cell
-                <div key={tpl.id} className={`reveal shell ${i === 0 && shown.length % 2 ? 'md:col-span-2' : ''}`} style={stagger(i + 2)}>
-                  <div className="core flex h-full flex-col gap-3 p-6">
-                    <span className="badge self-start bg-accent-soft text-accent-soft-ink">{tpl.category}</span>
-                    <h2 className="text-lg font-semibold tracking-tight">{tpl.title}</h2>
-                    <p className="max-w-[65ch] text-[0.9375rem] leading-relaxed text-muted">
-                      {state.analysis.templates.find((x) => x.id === tpl.id)?.reason}
-                    </p>
-                    <Link href={`/templates/${tpl.id}`} className="btn btn-primary mt-auto self-start">
-                      {tr('useTemplate')}
-                      <span className="btn-orb"><ArrowUpRight size={15} weight="bold" aria-hidden /></span>
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <TemplateCards
+              items={state.templates}
+              note={(tpl) => state.analysis.templates.find((x) => x.id === tpl.id)?.reason}
+              cta={tr('useTemplate')}
+            />
           )}
           <p className="text-sm text-muted">{tr('disclaimer')}</p>
         </section>
       )}
+      </div>
+    </div>
+  );
+}
+
+function TemplateCards({ items, note, cta }: { items: TemplateSummary[]; note: (tpl: TemplateSummary) => string | undefined; cta: string }) {
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      {items.slice(0, 3).map((tpl, i, shown) => (
+        // odd count: the top match spans the full row so the grid never leaves an empty cell
+        <div key={tpl.id} className={`reveal shell ${i === 0 && shown.length % 2 ? 'md:col-span-2' : ''}`} style={stagger(i + 2)}>
+          <div className="core flex h-full flex-col gap-3 p-6">
+            <span className="badge self-start bg-accent-soft text-accent-soft-ink">{tpl.category}</span>
+            <h2 className="text-lg font-semibold tracking-tight">{tpl.title}</h2>
+            <p className="max-w-[65ch] text-[0.9375rem] leading-relaxed text-muted">{note(tpl)}</p>
+            <Link href={`/templates/${tpl.id}`} className="btn btn-primary mt-auto self-start">
+              {cta}
+              <span className="btn-orb"><ArrowUpRight size={15} weight="bold" aria-hidden /></span>
+            </Link>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

@@ -33,7 +33,18 @@
     "browseLibrary": "Layari pustaka",
     "example1": "Pekerja sentiasa lewat, sudah beri amaran lisan dua kali.",
     "example2": "Pekerja mahu berhenti, berapa lama notis diperlukan?",
-    "example3": "Saya mahu mengambil pekerja sambilan, kontrak apa yang diperlukan?"
+    "example3": "Saya mahu mengambil pekerja sambilan, kontrak apa yang diperlukan?",
+    "example4": "Pekerja tidak hadir 3 hari berturut-turut tanpa memaklumkan sesiapa.",
+    "example5": "Pelanggan mengadu pekerja saya bersikap biadab.",
+    "example6": "Prestasi kerja pekerja semakin merosot, saya mahu tetapkan sasaran penambahbaikan.",
+    "example7": "Jawapan surat tunjuk sebab tidak memuaskan, apakah langkah seterusnya?",
+    "example8": "Saya mengambil pekerja baharu dan perlukan surat tawaran.",
+    "example9": "Berkongsi maklumat perniagaan dengan rakan kongsi, perlukan perjanjian kerahsiaan.",
+    "example10": "Mengambil pekerja bebas untuk projek, perjanjian apa yang perlu ditandatangani?",
+    "example11": "Syarikat saya belum ada peraturan HR bertulis, di mana saya patut mula?",
+    "fallbackNote": "Cadangan pintar tidak tersedia buat masa ini.",
+    "fallbackMatches": "Templat ini sepadan dengan perkataan yang anda gunakan:",
+    "fallbackNone": "Tiada templat yang sepadan dengan perkataan anda. Cuba perkataan lain, atau layari pustaka."
   },
   "result": {
     "disclaimer": "Ini adalah panduan umum, bukan nasihat undang-undang.",
