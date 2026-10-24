@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
-import { LanguageSwitch } from "@/components/language-switch";
 import { getLocale } from "next-intl/server";
 
 const geistSans = Geist({
@@ -29,7 +28,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
-          <div className="flex justify-end p-2"><LanguageSwitch /></div>
           {children}
         </NextIntlClientProvider>
       </body>

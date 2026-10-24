@@ -19,7 +19,8 @@
     "submit": "Sign in",
     "error": "Incorrect email or password",
     "expired": "Your subscription has expired. Please contact us to renew.",
-    "forgot": "Forgot password? Contact us."
+    "forgot": "Forgot password? Contact us.",
+    "tagline": "Practical HR guidance and ready-to-use document templates for Malaysian SMEs."
   },
   "ask": {
     "aiFailure": "Couldn't analyse right now. Try again or browse the library.",

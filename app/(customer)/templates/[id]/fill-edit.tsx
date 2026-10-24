@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { ArrowLeft, ArrowRight, FileDoc, FilePdf, Warning } from '@phosphor-icons/react';
 import { Editor } from '@/components/editor';
 import { fillTemplate } from '@/lib/placeholders';
 import { loadDraft, saveDraft } from '@/lib/draft';
@@ -85,20 +86,27 @@ export function FillEdit({ userId, templateId, title, html: tpl, fields }: { use
 
   if (step === 'edit' && html !== null) {
     return (
-      <div className="flex flex-col gap-4">
-        <h1 className="text-2xl font-semibold">{title}</h1>
-        <p className="text-sm text-gray-600">{t('editHint')}</p>
-        <Editor initialHtml={html} onChange={setHtml} />
+      <div className="flex flex-col gap-8">
+        <div className="reveal flex flex-col gap-3">
+          <h1 className="max-w-[28ch] text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{title}</h1>
+          <p className="text-[0.9375rem] text-muted">{t('editHint')}</p>
+        </div>
+        <div className="reveal" style={{ '--i': 1 } as React.CSSProperties}>
+          <Editor initialHtml={html} onChange={setHtml} />
+        </div>
         {error && (
-          <p role="alert" className="text-sm text-red-600">
+          <p role="alert" className="flex items-start gap-2 rounded-2xl bg-danger-soft px-4 py-3 text-sm text-danger">
+            <Warning size={18} weight="regular" className="mt-px shrink-0" aria-hidden />
             {t('exportFailed')}
           </p>
         )}
-        <div className="flex flex-wrap gap-2">
-          <button type="button" disabled={busy} onClick={() => download('docx')} className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50">
+        <div className="flex flex-wrap items-center gap-3">
+          <button type="button" disabled={busy} onClick={() => download('docx')} className="btn btn-primary">
+            <FileDoc size={18} weight="light" aria-hidden />
             {t('downloadDocx')}
           </button>
-          <button type="button" disabled={busy} onClick={() => download('pdf')} className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50">
+          <button type="button" disabled={busy} onClick={() => download('pdf')} className="btn btn-primary">
+            <FilePdf size={18} weight="light" aria-hidden />
             {t('downloadPdf')}
           </button>
           <button
@@ -109,8 +117,9 @@ export function FillEdit({ userId, templateId, title, html: tpl, fields }: { use
                 setStep('fill');
               }
             }}
-            className="rounded border border-gray-300 px-4 py-2"
+            className="btn btn-quiet sm:ml-auto"
           >
+            <ArrowLeft size={16} weight="light" aria-hidden />
             {t('back')}
           </button>
         </div>
@@ -120,36 +129,45 @@ export function FillEdit({ userId, templateId, title, html: tpl, fields }: { use
 
   return (
     <form
-      className="flex flex-col gap-4"
+      className="mx-auto flex max-w-2xl flex-col gap-8"
       onSubmit={(e) => {
         e.preventDefault();
         setHtml(fillTemplate(tpl, fields, values));
         setStep('edit');
       }}
     >
-      <h1 className="text-2xl font-semibold">{title}</h1>
-      <p className="text-sm text-gray-600">{t('fillTitle')}</p>
-      {fields.map((f) => (
-        <div key={f.key} className="flex flex-col gap-1">
-          <label htmlFor={`f-${f.key}`} className="font-medium">
-            {f.label}
-          </label>
-          <input
-            id={`f-${f.key}`}
-            value={Object.hasOwn(values, f.key) ? values[f.key] : ''}
-            onChange={(e) => setValues({ ...values, [f.key]: e.target.value })}
-            aria-describedby={f.hint ? `h-${f.key}` : undefined}
-            className="rounded border border-gray-300 px-3 py-2"
-          />
-          {f.hint && (
-            <span id={`h-${f.key}`} className="text-sm text-gray-500">
-              {f.hint}
-            </span>
-          )}
+      <div className="reveal flex flex-col gap-3">
+        <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{title}</h1>
+        <p className="text-[0.9375rem] text-muted">{t('fillTitle')}</p>
+      </div>
+      {fields.length > 0 && (
+        <div className="reveal shell" style={{ '--i': 1 } as React.CSSProperties}>
+          <div className="core flex flex-col gap-5 p-6 sm:p-8">
+            {fields.map((f) => (
+              <div key={f.key} className="flex flex-col gap-2">
+                <label htmlFor={`f-${f.key}`} className="label">
+                  {f.label}
+                </label>
+                <input
+                  id={`f-${f.key}`}
+                  value={Object.hasOwn(values, f.key) ? values[f.key] : ''}
+                  onChange={(e) => setValues({ ...values, [f.key]: e.target.value })}
+                  aria-describedby={f.hint ? `h-${f.key}` : undefined}
+                  className="field"
+                />
+                {f.hint && (
+                  <span id={`h-${f.key}`} className="text-sm text-muted">
+                    {f.hint}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-      <button type="submit" className="self-start rounded bg-blue-600 px-4 py-2 text-white">
+      )}
+      <button type="submit" className="reveal btn btn-primary self-start" style={{ '--i': 2 } as React.CSSProperties}>
         {t('continue')}
+        <span className="btn-orb"><ArrowRight size={15} weight="bold" aria-hidden /></span>
       </button>
     </form>
   );

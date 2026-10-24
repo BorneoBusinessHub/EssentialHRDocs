@@ -1,18 +1,12 @@
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { LogoutButton } from '@/components/logout-button';
+import { AppHeader } from '@/components/app-header';
 
-// LanguageSwitch is rendered by the root layout, so it is not repeated here.
 export default async function CustomerLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations('common');
   return (
-    <div>
-      <header className="flex flex-wrap items-center gap-4 border-b p-4">
-        <Link href="/" className="font-semibold">{t('appName')}</Link>
-        <Link href="/library">{t('library')}</Link>
-        <LogoutButton label={t('logout')} />
-      </header>
-      <main className="mx-auto max-w-3xl p-4 sm:p-6">{children}</main>
+    <div className="flex flex-1 flex-col">
+      <AppHeader home="/" brand={t('appName')} logout={t('logout')} items={[{ href: '/library', label: t('library'), icon: 'library' }]} />
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-10 sm:px-6 sm:pt-16">{children}</main>
     </div>
   );
 }
