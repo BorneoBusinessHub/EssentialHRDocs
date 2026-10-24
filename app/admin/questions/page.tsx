@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { ArrowLeft, ArrowRight, ChatCircleText } from '@phosphor-icons/react/ssr';
 import { requireAdmin } from '@/lib/access';
 import { safeAnalysis } from '@/lib/ai/parse';
 
@@ -41,40 +42,64 @@ export default async function QuestionsPage({ searchParams }: { searchParams: Pr
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">{t('navQuestions')}</h1>
-      {rows.length === 0 && <p>{t('qEmpty')}</p>}
-      <div className="overflow-x-auto">
-      <table className="w-full text-left text-sm">
-        <thead>
-          <tr><th>{t('qTime')}</th><th>{t('company')}</th><th>{t('qLocale')}</th><th>{t('qQuestion')}</th><th>{t('qAnswer')}</th></tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.id} className="border-t align-top">
-              <td className="py-2 pr-2 whitespace-nowrap">{fmt.format(new Date(r.created_at))}</td>
-              <td className="pr-2">{r.profiles?.company_name}</td>
-              <td className="pr-2">{r.locale}</td>
-              <td className="pr-2">{r.question}</td>
-              <td>
-                {r.analysis ? (
-                  <>
-                    <div>{r.analysis.suggestion.slice(0, 2).join(' / ')}{r.analysis.suggestion.length > 2 ? ' …' : ''}</div>
-                    <div className="text-zinc-600">{r.analysis.templates.map((x) => titles.get(x.id) ?? x.id).join(', ')}</div>
-                  </>
-                ) : (
-                  <span className="text-red-700">{t('qFailed')}</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="flex flex-col gap-8">
+      <h1 className="reveal text-4xl font-semibold tracking-tight">{t('navQuestions')}</h1>
+      <div className="reveal shell" style={{ '--i': 1 } as React.CSSProperties}>
+        <div className="core overflow-hidden">
+          {rows.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
+              <span className="flex size-12 items-center justify-center rounded-full bg-surface-2 text-muted">
+                <ChatCircleText size={22} weight="light" aria-hidden />
+              </span>
+              <p className="text-muted">{t('qEmpty')}</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="data-table">
+                <thead>
+                  <tr><th>{t('qTime')}</th><th>{t('company')}</th><th>{t('qLocale')}</th><th>{t('qQuestion')}</th><th>{t('qAnswer')}</th></tr>
+                </thead>
+                <tbody>
+                  {rows.map((r) => (
+                    <tr key={r.id}>
+                      <td className="whitespace-nowrap font-mono text-xs tabular-nums text-muted">{fmt.format(new Date(r.created_at))}</td>
+                      <td className="font-medium">{r.profiles?.company_name}</td>
+                      <td><span className="badge bg-surface-2 uppercase text-muted">{r.locale}</span></td>
+                      <td className="min-w-64 max-w-[40ch]">{r.question}</td>
+                      <td className="min-w-64">
+                        {r.analysis ? (
+                          <div className="flex flex-col gap-1.5">
+                            <div>{r.analysis.suggestion.slice(0, 2).join(' / ')}{r.analysis.suggestion.length > 2 ? ' …' : ''}</div>
+                            <div className="text-muted">{r.analysis.templates.map((x) => titles.get(x.id) ?? x.id).join(', ')}</div>
+                          </div>
+                        ) : (
+                          <span className="badge bg-danger-soft text-danger">{t('qFailed')}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="flex gap-4">
-        {page > 1 && <Link href={`/admin/questions?page=${page - 1}`} className="underline">{t('qPrev')}</Link>}
-        {rows.length === PER_PAGE && <Link href={`/admin/questions?page=${page + 1}`} className="underline">{t('qNext')}</Link>}
-      </div>
+      {(page > 1 || rows.length === PER_PAGE) && (
+        <div className="flex gap-3">
+          {page > 1 && (
+            <Link href={`/admin/questions?page=${page - 1}`} className="btn btn-quiet btn-sm">
+              <ArrowLeft size={14} weight="light" aria-hidden />
+              {t('qPrev')}
+            </Link>
+          )}
+          {rows.length === PER_PAGE && (
+            <Link href={`/admin/questions?page=${page + 1}`} className="btn btn-quiet btn-sm">
+              {t('qNext')}
+              <ArrowRight size={14} weight="light" aria-hidden />
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   );
 }

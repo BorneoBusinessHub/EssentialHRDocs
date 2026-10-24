@@ -6,7 +6,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import { useTranslations } from 'next-intl';
 
 const PROSE =
-  'min-h-[24rem] rounded-b border border-gray-300 bg-white p-4 focus:outline-none [&_table]:border-collapse [&_td]:border [&_th]:border [&_td]:p-1 [&_th]:p-1 [&_h1]:text-2xl [&_h2]:text-xl [&_h3]:text-lg [&_h1]:font-semibold [&_h2]:font-semibold [&_h3]:font-semibold [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-6 [&_ol]:pl-6';
+  'doc-paper min-h-[28rem] px-6 py-8 text-ink focus:outline-none sm:px-12 sm:py-12 [&_.selectedCell]:bg-accent-soft';
 
 export function Editor({ initialHtml, onChange }: { initialHtml: string; onChange: (html: string) => void }) {
   const t = useTranslations('fill');
@@ -42,8 +42,8 @@ export function Editor({ initialHtml, onChange }: { initialHtml: string; onChang
   ];
 
   return (
-    <div>
-      <div role="toolbar" className="flex flex-wrap gap-1 rounded-t border border-b-0 border-gray-300 bg-gray-50 p-2">
+    <div className="shell">
+      <div role="toolbar" className="sticky top-20 z-10 flex flex-wrap gap-0.5 rounded-t-[1.375rem] bg-surface-2/90 p-1.5 backdrop-blur-xl sm:top-24">
         {items.map(([label, text, run, pressed]) => (
           <button
             key={label}
@@ -51,13 +51,15 @@ export function Editor({ initialHtml, onChange }: { initialHtml: string; onChang
             aria-label={label}
             aria-pressed={pressed}
             onClick={run}
-            className={`rounded px-2 py-1 text-sm hover:bg-gray-200 ${pressed ? 'bg-gray-300 font-semibold' : ''}`}
+            className={`cursor-pointer rounded-full px-2.5 py-1 text-[0.8125rem] transition-colors duration-200 hover:bg-surface hover:text-ink focus-visible:outline-2 focus-visible:outline-accent ${pressed ? 'bg-surface font-semibold text-ink shadow-[0_0_0_1px_var(--line)]' : 'text-muted'}`}
           >
             {text}
           </button>
         ))}
       </div>
-      <EditorContent editor={editor} />
+      <div className="core mt-1.5 rounded-t-md">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 'use client';
+import { SignOut } from '@phosphor-icons/react';
 import { logout } from '@/app/login/actions';
 import { clearAllDrafts } from '@/lib/draft';
 
@@ -12,9 +13,12 @@ export function LogoutButton({ label }: { label: string }) {
           clearAllDrafts(window.localStorage);
         } catch {}
       }}
-      className="ml-auto"
     >
-      <button type="submit" className="underline">{label}</button>
+      <button type="submit" className="nav-link cursor-pointer">
+        <SignOut size={16} weight="light" aria-hidden />
+        <span className="hidden lg:inline">{label}</span>
+        <span className="sr-only lg:hidden">{label}</span>
+      </button>
     </form>
   );
 }

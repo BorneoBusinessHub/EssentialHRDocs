@@ -19,7 +19,8 @@
     "submit": "Sign in",
     "error": "Incorrect email or password",
     "expired": "Your subscription has expired. Please contact us to renew.",
-    "forgot": "Forgot password? Contact us."
+    "forgot": "Forgot password? Contact us.",
+    "tagline": "Practical HR guidance and ready-to-use document templates for Malaysian SMEs."
   },
   "ask": {
     "aiFailure": "Couldn't analyse right now. Try again or browse the library.",
@@ -32,7 +33,18 @@
     "browseLibrary": "Browse the library",
     "example1": "Staff keeps coming late, already gave verbal warning twice.",
     "example2": "Employee wants to resign, how much notice is needed?",
-    "example3": "I want to hire a part-timer, what contract do I need?"
+    "example3": "I want to hire a part-timer, what contract do I need?",
+    "example4": "Staff absent 3 days in a row without telling anyone.",
+    "example5": "A customer complained that my staff was rude to them.",
+    "example6": "Staff's work quality keeps dropping, I want to set improvement targets.",
+    "example7": "The show cause reply was not acceptable, what is the next step?",
+    "example8": "I'm hiring a new staff member and need an offer letter.",
+    "example9": "Sharing business information with a partner, need a confidentiality agreement.",
+    "example10": "Hiring a freelancer for a project, what agreement should we sign?",
+    "example11": "My company has no written HR rules yet, where do I start?",
+    "fallbackNote": "Smart suggestions are not available right now.",
+    "fallbackMatches": "These templates match the words you used:",
+    "fallbackNone": "No templates matched your words. Try different words, or browse the library."
   },
   "result": {
     "disclaimer": "This is general guidance, not legal advice.",
